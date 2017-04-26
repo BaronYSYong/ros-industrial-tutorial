@@ -105,3 +105,69 @@ Now add code to the ```localizePart``` callback function to fill in the Service 
 Comment out the ```ROS_INFO_STREAM``` call in your ```visionCallback``` function, to avoid cluttering the screen with useless info.
 
 catkin_make the updated vision_node
+
+## Service Client
+Create a new node (inside the same myworkcell_core package), named myworkcell_node.cpp. This will eventually be our main "application node", that controls the sequence of actions in our Scan & Plan task. The first action we'll implement is to request the position of the AR target from the Vision Node's LocalizePart service we created above.
+
+Be sure to include the standard ros header as well as the header for the LocalizePart service:
+```
+#include <ros/ros.h>
+#include <myworkcell_core/LocalizePart.h>
+```
+Create a standard C++ main function, with typical ROS node initialization:
+```
+int main(int argc, char **argv)
+{
+  ros::init(argc, argv, "myworkcell_node");
+  ros::NodeHandle nh;
+
+  ROS_INFO("ScanNPlan node has been initialized");
+
+  ros::spin();
+}
+```
+As in the vision_node, we will be using a cpp class "ScanNPlan" to contain most functionality of this node. Create a skeleton structure of this class, with an empty constructor and a private area for some internal/private variables.
+```
+class ScanNPlan
+{
+public:
+  ScanNPlan(ros::NodeHandle& nh)
+  {
+
+  }
+
+private:
+  // Planning components
+
+};
+```
+Within your new ScanNPlan class, define a ROS ServiceClient as a private member variable of the class. Initialize the ServiceClient in the ScanNPlan constructor, using the same service name as defined earlier ("localize_part"). Create a void function within the ScanNPlan class named start, with no arguments. This will contain most of our application workflow. For now, this function will call the LocalizePart service and print the response.
+```
+class ScanNPlan
+{
+public:
+  ScanNPlan(ros::NodeHandle& nh)
+  {
+    vision_client_ = nh.serviceClient<myworkcell_core::LocalizePart>("localize_part");
+  }
+
+  void start()
+  {
+    ROS_INFO("Attempting to localize part");
+    // Localize the part
+    myworkcell_core::LocalizePart srv;
+    if (!vision_client_.call(srv))
+    {
+      ROS_ERROR("Could not localize part");
+      return;
+    }
+    ROS_INFO_STREAM("part localized: " << srv.response);
+  }
+
+private:
+  // Planning components
+  ros::ServiceClient vision_client_;
+};
+```
+Now back in myworkcell_node's main function, instantiate an object of the ScanNPlan class and call the object's start function.
+

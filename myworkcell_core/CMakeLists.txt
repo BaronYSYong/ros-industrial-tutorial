@@ -4,14 +4,30 @@ project(myworkcell_core)
 add_definitions(-std=c++11)
 
 find_package(catkin REQUIRED COMPONENTS 
-    roscpp
-    fake_ar_publisher
+    roscpp 
+    fake_ar_publisher 
+    geometry_msgs 
+    message_generation 
 )
 
-catkin_package(
+## Generate services in the 'srv' folder
+add_service_files(
+    FILES
+    LocalizePart.srv
+)
+
+## Generate added messages and services with any dependencies listed here
+generate_messages(
+    DEPENDENCIES
+    geometry_msgs
+)
+
+catkin_package( 
     CATKIN_DEPENDS 
-      roscpp 
-      fake_ar_publisher
+    roscpp 
+    fake_ar_publisher 
+    message_runtime 
+    geometry_msgs 
 )
 
 include_directories(${catkin_INCLUDE_DIRS})
