@@ -1,4 +1,4 @@
-# Exerciese 1.3. Creating a ROS Package and Node
+# Exerciese 1.3: Creating a ROS Package and Node
 
 ## Create a Package
 ```

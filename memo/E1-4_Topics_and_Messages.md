@@ -1,4 +1,4 @@
-# Exercise 1.4. Topics and Messages
+# Exercise 1.4: Topics and Messages
 
 ## Add the fake_ar_publisher Package as a Dependency
 Locate the ```fake_ar_publisher``` package
