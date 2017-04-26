@@ -93,4 +93,43 @@ Once the window opens, type ```/ar_pose_marker/pose/pose/position/x``` in the "T
 Type ```/ar_pose_marker/pose/pose/position/y``` in the topic field, and click on the add button. You will now see both the x and y values being graphed.
 
 ## Create Subscriber Node
-Edit the ```vision_node.cpp``` file.
+Edit the ```vision_node.cpp``` file. Include the message type as a header
+```
+#include <fake_ar_publisher/ARMarker.h>
+```
+Add the code that will be run when a message is received from the topic (the callback).
+```
+class Localizer
+{
+public:
+    Localizer(ros::NodeHandle& nh)
+    {
+        ar_sub_ = nh.subscribe<fake_ar_publisher::ARMarker>("ar_pose_marker", 1, 
+        &Localizer::visionCallback, this);
+    }
+
+    void visionCallback(const fake_ar_publisher::ARMarkerConstPtr& msg)
+    {
+        last_msg_ = msg;
+        ROS_INFO_STREAM(last_msg_->pose.pose);
+    }
+ 
+    ros::Subscriber ar_sub_;
+    fake_ar_publisher::ARMarkerConstPtr last_msg_;
+};
+```
+Add the code that will connect the callback to the topic (within ```main()```)
+```
+int main(int argc, char** argv)
+{
+    ...
+    // The Localizer class provides this node's ROS interfaces
+    Localizer localizer(nh);
+
+    ROS_INFO("Vision node starting");
+}
+```
+Run ```catkin_make```, then ```rosrun myworkcell_core vision_node```
+
+You should see the positions display from the publisher.
+Use ```rqt_graph``` to check the architecture
