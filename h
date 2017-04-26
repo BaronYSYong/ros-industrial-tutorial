@@ -1,2 +1,0 @@
-*  (HEAD, master) [32m232eb1e[m baron-Endeavor - add dir myworkcell_core, memo and fake_ar_publisher
-*  (origin/master, origin/HEAD) [32m87051e6[m BaronYong - README.md created online with Bitbucket
