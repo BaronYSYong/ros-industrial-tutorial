@@ -1,7 +1,6 @@
 # Exerciese 1.3. Creating a ROS Package and Node
 
-## Scan-N-Plan Application: Guidance
-### Create a Package
+## Create a Package
 ```
 $ cd ~/catkin_ws/src
 $ catkin_create_pkg myworkcell_core roscpp
@@ -9,7 +8,7 @@ $ cd myworkcell_core
 $ vim package.xml
 ```
 
-### Create a node
+## Create a node
 ```
 $ vim CMakeLists.txt
 ```
@@ -54,7 +53,7 @@ $ cd ~/catkin_ws
 $ catkin_make
 ```
 
-### Run a Node
+## Run a Node
 Open a terminal and start the ROS master.
 ```
 $ roscore
