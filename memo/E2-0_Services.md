@@ -17,11 +17,11 @@ $ touch LocalizePart.srv
 ```
 Inside the file, define the service as outlined above with a request of type ```string``` named ```base_frame``` and a response of type ```geometry_msgs/Pose``` named ```pose```:
 ```
- #request
- string base_frame
- ---
- #response
- geometry_msgs/Pose pose
+#request
+string base_frame
+---
+#response
+geometry_msgs/Pose pose
 ```
 Edit the package's ```CMakeLists.txt``` and ```package.xml``` to add dependencies on key packages:
 
@@ -165,9 +165,31 @@ public:
   }
 
 private:
-  // Planning components
+  // Planning components>
   ros::ServiceClient vision_client_;
 };
 ```
 Now back in myworkcell_node's main function, instantiate an object of the ScanNPlan class and call the object's start function.
+```
+ScanNPlan app(nh);
 
+ros::Duration(.5).sleep();  // wait for the class to initialize
+app.start();
+```
+Edit the package's CMakeLists.txt to build the new node (executable), with its associated dependencies. Add the following rules to the appropriate sections, directly under the matching rules for vision_node:
+```
+add_executable(myworkcell_node src/myworkcell_node.cpp)
+...
+add_dependencies(myworkcell_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+...
+target_link_libraries(myworkcell_node ${catkin_LIBRARIES})
+```
+catkin_make the nodes
+
+## Use New Service
+```
+$ roscore
+$ rosrun fake_ar_publisher fake_ar_publisher_node
+$ rosrun myworkcell_core vision_node
+$ rosrun myworkcell_core myworkcell_node
+```

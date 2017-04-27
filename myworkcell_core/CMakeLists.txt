@@ -35,3 +35,7 @@ include_directories(${catkin_INCLUDE_DIRS})
 add_executable(vision_node src/vision_node.cpp)
 target_link_libraries(vision_node ${catkin_LIBRARIES})
 add_dependencies(vision_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+add_executable(myworkcell_node src/myworkcell_node.cpp)
+target_link_libraries(myworkcell_node ${catkin_LIBRARIES})
+add_dependencies(myworkcell_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
