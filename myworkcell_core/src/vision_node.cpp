@@ -46,8 +46,7 @@ public:
      */ 
     tf::StampedTransform req_to_cam;
     ROS_INFO("%s\n", req.base_frame.c_str());
-    //~ listener_.lookupTransform(req.base_frame, p->header.frame_id, ros::Time(0), req_to_cam);
-    listener_.lookupTransform("table", p->header.frame_id, ros::Time(0), req_to_cam);
+    listener_.lookupTransform(req.base_frame, p->header.frame_id, ros::Time(0), req_to_cam);
 
     ROS_INFO("3");
     /// Using the above information, transform the object pose into the target frame

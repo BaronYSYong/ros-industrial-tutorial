@@ -16,15 +16,16 @@ public:
         ROS_INFO("Attempting to localize part");
         // Localize the part
         myworkcell_core::LocalizePart srv;
+        /// define srv.request.base_frame beforehand
+        srv.request.base_frame = base_frame;
+        ROS_INFO_STREAM("Requesting pose in base frame: " << base_frame);
+        
         if (!vision_client_.call(srv))
         {
             ROS_ERROR("Could not localize part");
             return;
         }
         ROS_INFO_STREAM("part localized: " << srv.response);
-           
-        srv.request.base_frame = base_frame;
-        ROS_INFO_STREAM("Requesting pose in base frame: " << base_frame);
     }
 
 private:
