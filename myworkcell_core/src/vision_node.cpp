@@ -1,9 +1,11 @@
 /**
-**  Simple ROS Node
+** Service Server 
+** Simple ROS Node
 **/
 #include <ros/ros.h>
 #include <fake_ar_publisher/ARMarker.h>
 #include <myworkcell_core/LocalizePart.h>
+#include <tf/transform_listener.h>
 
 class Localizer
 {
@@ -27,13 +29,42 @@ public:
     fake_ar_publisher::ARMarkerConstPtr p = last_msg_;  
     if (!p) return false;
 
-    res.pose = p->pose.pose;
+    ROS_INFO("1");
+    //~ res.pose = p->pose.pose;
+    
+    /*! @brief
+     * 1. convert the reported target pose from its reference frame ("camera_frame") to the service-request frame
+     * 2. transform the over-the-wire format of geometry_msgs::Pose into a tf::Transform object
+     */
+    tf::Transform cam_to_target;
+    tf::poseMsgToTF(p->pose.pose, cam_to_target);
+
+    ROS_INFO("2");
+    /*! @brief
+     * Use the listener object to lookup the latest transform between the request.base_frame and the reference 
+     * frame from the ARMarker message (which should be "camera_frame"):
+     */ 
+    tf::StampedTransform req_to_cam;
+    ROS_INFO("%s\n", req.base_frame.c_str());
+    //~ listener_.lookupTransform(req.base_frame, p->header.frame_id, ros::Time(0), req_to_cam);
+    listener_.lookupTransform("table", p->header.frame_id, ros::Time(0), req_to_cam);
+
+    ROS_INFO("3");
+    /// Using the above information, transform the object pose into the target frame
+    tf::Transform req_to_target;
+    req_to_target = req_to_cam * cam_to_target;
+
+    ROS_INFO("4");    
+    /// Return the transformed pose in the service response
+    tf::poseTFToMsg(req_to_target, res.pose);
+    
     return true;
     }
  
     ros::ServiceServer server_;
     ros::Subscriber ar_sub_;
     fake_ar_publisher::ARMarkerConstPtr last_msg_;
+    tf::TransformListener listener_;
 };
 
 int main(int argc, char** argv)
