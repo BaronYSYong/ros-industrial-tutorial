@@ -70,5 +70,6 @@ int main(int argc, char **argv)
     async_spinner.start();
     app.start(base_frame);
 
-    ros::spin();   
+    //~ ros::spin();
+    ros::waitForShutdown(); 
 }
