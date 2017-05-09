@@ -24,13 +24,13 @@ geometry_msgs::Pose move_target = flipPose(srv.response.pose);
 ```
 * Use the MoveGroupInterface to plan/execute a move to the move_target position:
 * The MoveGroupInterface is part of the moveit_ros_planning_interface package, so you’ll need to add this as a dependency to your myworkcell_core package. Modify your package's CMakeLists.txt (2 lines) and package.xml (2 lines) as in previous exercises.
-* Add the appropriate "include" reference to allow use of the MoveGroupInterface:
+* Add the appropriate "include" reference to allow use of the MoveGroup:
 ```
-#include <moveit/move_group_interface/move_group_interface.h>
+#include <moveit/move_group_interface/move_group.h>
 ```
-* Create a moveit::planning_interface::MoveGroupInterface object in the ScanNPlan class's start() method. It has a single constructor that takes the name of the planning group you defined when creating the workcell moveit package (“manipulator”).
+* Create a moveit::planning_interface::MoveGroup object in the ScanNPlan class's start() method. It has a single constructor that takes the name of the planning group you defined when creating the workcell moveit package (“manipulator”).
 ```
-moveit::planning_interface::MoveGroupInterface move_group("manipulator");
+moveit::planning_interface::MoveGroup move_group("manipulator");
 ```
 * Set the desired cartesian target position using the move_group object’s setPoseTarget function. Call the object's move() function to plan and execute a move to the target position.
 ```
@@ -62,6 +62,9 @@ $ roslaunch myworkcell_support workcell.launch
 
 ## fake_ar_publisher.cpp
 * Edit fake_ar_publisher.cpp and change lines 70-72 to use an offset of (-0.5, 0.0, 0.5), not (0,0,0.5). This points the box offset from the camera centerline
+
+## rqt_graph
+![](image/moveit_cpp.png) 
 
 
 ## More to explore ...

@@ -3,7 +3,7 @@
 #include <ros/ros.h>
 #include <myworkcell_core/LocalizePart.h>
 #include <tf/tf.h>
-#include <moveit/move_group_interface/move_group_interface.h>
+#include <moveit/move_group_interface/move_group.h>
 
 class ScanNPlan
 {
@@ -29,7 +29,7 @@ public:
         }
         ROS_INFO_STREAM("part localized: " << srv.response);
         geometry_msgs::Pose move_target = flipPose(srv.response.pose);
-        moveit::planning_interface::MoveGroupInterface move_group("manipulator");
+        moveit::planning_interface::MoveGroup move_group("manipulator");
         // Plan for robot to move to part
         move_group.setPoseTarget(move_target); 
         move_group.move();
