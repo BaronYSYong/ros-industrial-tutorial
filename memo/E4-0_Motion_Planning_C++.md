@@ -42,8 +42,31 @@ move_group.move();
 * Add below private node-handle definition: ros::AsyncSpinner async_spinner(1);
 * Add above app.start(base_frame): async_spinner.start();
 * replace ros::spin() with ros::waitForShutdown();
+```
+int main(int argc, char **argv)
+{
+    ros::init(argc, argv, "myworkcell_node");
+    ros::NodeHandle nh;
+    ros::NodeHandle private_node_handle ("~");
+    std::string base_frame;
 
-* Test the system!
+    /// parameter name, string object reference, default value
+    private_node_handle.param<std::string>("base_frame", base_frame, "world"); 
+    ros::AsyncSpinner async_spinner(1);
+    
+    ROS_INFO("ScanNPlan node has been initialized");
+
+    ScanNPlan app(nh);
+
+    ros::Duration(.5).sleep();  // wait for the class to initialize
+    async_spinner.start();
+    app.start(base_frame);
+
+    ros::spin();
+}
+```
+
+* Test the system
 ```
 $ catkin_make
 $ roslaunch myworkcell_moveit_config myworkcell_planning_execution.launch
