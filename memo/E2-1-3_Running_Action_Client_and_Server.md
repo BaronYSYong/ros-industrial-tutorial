@@ -86,4 +86,4 @@ result:
 ```
 
 ### rqt_graph
-![](/home/baron/catkin_ws/src/ros-industrial/memo/image/action_server_client.png) 
+![](image/action_server_client.png) 
